@@ -1,16 +1,21 @@
-import axios from "axios";
 import { useEffect, useState } from "react"
 
 export const useGetPriorities = (url) => {
   const [priorities, setPriorities] = useState([]);
 
   useEffect(() => {
-    axios.get(url)
+    const getPriorities = async () => {
+      const res = await fetch(url)
+      const json = await res.json();
+      return await json
+    }
+    getPriorities()
     .then(res => {
-      console.log(res)
       setPriorities(res)
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+    })
   }, [url])
 
   return priorities

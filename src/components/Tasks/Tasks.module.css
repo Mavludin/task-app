@@ -59,12 +59,7 @@ th {
 
 td {
   padding: 10px;
-}
-
-td div {
-  width: 2px;
-  height: 100%;
-  background-color: red;
+  position: relative;
 }
 
 .taskStatus {

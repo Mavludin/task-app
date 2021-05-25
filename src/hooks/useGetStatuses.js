@@ -7,7 +7,7 @@ export const useGetStatuses = (url) => {
     const getStatuses = async () => {
       const res = await fetch(url)
       const json = await res.json();
-      return await json.value
+      return await json
     }
     getStatuses()
     .then(res => {
