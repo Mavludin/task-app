@@ -1,0 +1,23 @@
+.mainNav {
+  background-color: #002137;
+  height: 100%;
+  width: 100px;
+}
+
+.mainNav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+}
+
+.active {
+  background-color: #002c49;
+}
+
+.mainNav a span {
+  line-height: 1.5;
+}
