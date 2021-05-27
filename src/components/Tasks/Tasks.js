@@ -2,17 +2,30 @@ import React from "react";
 import { useGetPriorities } from "../../hooks/useGetPriorities";
 import { useGetStatuses } from "../../hooks/useGetStatuses";
 import { useGetTasks } from "../../hooks/useGetTasks";
-import { prioritiesUrl, statusesUrl, tasksUrl } from "../../shared/endpoints";
+import { prioritiesUrl, singleTaskUrl, statusesUrl, tasksUrl } from "../../shared/endpoints";
 import styles from "./Tasks.module.css";
 
-export const Tasks = () => {
+export const Tasks = ({ setShowForm, setSelectedTask, setShowEditForm }) => {
   const tasks = useGetTasks(tasksUrl);
   const priorities = useGetPriorities(prioritiesUrl);
   const statuses = useGetStatuses(statusesUrl);
 
+  const selectTask = (task) => {
+    fetch(singleTaskUrl + '/' + task.id)
+      .then(async (res) => {
+        setSelectedTask(await res.json())
+        setShowEditForm(true)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <main className={styles.tasks}>
-      <button className="blueBtn">Создать заявку</button>
+      <button className="blueBtn" onClick={() => setShowForm(true)}>
+        Создать заявку
+      </button>
 
       {tasks.length > 0 ? (
         <>
@@ -38,7 +51,7 @@ export const Tasks = () => {
               <tbody>
                 {tasks.map((task) => {
                   return (
-                    <tr key={task.id}>
+                    <tr key={task.id} onClick={() => selectTask(task)}>
                       <td width="5%">
                         {priorities.map((prio) => {
                           if (task.priorityId === prio.id) {

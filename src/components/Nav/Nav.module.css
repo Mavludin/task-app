@@ -1,7 +1,8 @@
 .mainNav {
   background-color: #002137;
   height: 100%;
-  width: 100px;
+  width: 125px;
+  overflow-y: auto;
 }
 
 .mainNav a {

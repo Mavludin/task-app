@@ -1,3 +1,5 @@
-export const tasksUrl = 'http://intravision-task.test01.intravision.ru/odata/tasks?tenantguid=10979561-5b4d-430d-a9bc-b20cd82c359b'
-export const prioritiesUrl = 'http://intravision-task.test01.intravision.ru/api/10979561-5b4d-430d-a9bc-b20cd82c359b/Priorities'
-export const statusesUrl = 'http://intravision-task.test01.intravision.ru/api/10979561-5b4d-430d-a9bc-b20cd82c359b/Statuses'
+export const tasksUrl = 'http://intravision-task.test01.intravision.ru/odata/tasks?tenantguid=ae18aac3-0f2f-4d43-bdb4-62d2360f4abe'
+export const prioritiesUrl = 'http://intravision-task.test01.intravision.ru/api/ae18aac3-0f2f-4d43-bdb4-62d2360f4abe/Priorities'
+export const statusesUrl = 'http://intravision-task.test01.intravision.ru/api/ae18aac3-0f2f-4d43-bdb4-62d2360f4abe/Statuses'
+export const singleTaskUrl = 'http://intravision-task.test01.intravision.ru/api/ae18aac3-0f2f-4d43-bdb4-62d2360f4abe/Tasks'
+export const tagsUrl = 'http://intravision-task.test01.intravision.ru/api/ae18aac3-0f2f-4d43-bdb4-62d2360f4abe/Tags/'

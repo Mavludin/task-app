@@ -23,10 +23,11 @@ button, input, textarea {
 }
 
 button {
-  cursor: pointer
+  cursor: pointer;
+  background: none;
 }
 
-input, button {
+input, button, textarea {
   outline: none;
   border: none;
 }

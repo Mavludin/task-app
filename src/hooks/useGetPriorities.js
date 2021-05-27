@@ -11,7 +11,8 @@ export const useGetPriorities = (url) => {
     }
     getPriorities()
     .then(res => {
-      setPriorities(res)
+      setPriorities(res);
+      localStorage.setItem('priorities', JSON.stringify(res))
     })
     .catch(err => {
       console.log(err)

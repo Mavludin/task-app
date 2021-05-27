@@ -1,0 +1,155 @@
+.taskEdit {
+  height: calc(100vh - 65px);
+  width: 980px;
+  background-color: #ecf3f7;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.header {
+  background-color: #1a4876;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  color: white;
+}
+
+.taskNumber {
+  min-width: max-content;
+}
+
+.taskName {
+  margin-left: 30px;
+  text-align: left;
+}
+
+.formCover {
+  display: flex;
+  padding: 10px 30px;
+  justify-content: space-between;
+}
+
+.form {
+  text-align: left;
+  width: 650px;
+}
+
+.descriptionSection {
+  margin-bottom: 60px;
+}
+
+.taskEdit h4 {
+  color: #9f9ea7;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+
+.form textarea {
+  border: 1px solid #e8e8e8;
+  width: 100%;
+  resize: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.submitSection {
+  margin-top: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.loader {
+  margin-left: 10px;
+  width: 32px
+}
+
+.commentarySection {
+  margin-top: 40px;
+}
+
+.initiator {
+  display: flex;
+  align-items: center;
+}
+
+.inner {
+  margin-left: 10px;
+}
+
+.createdAt {
+  font-size: 14px;
+  color: #646464;
+}
+
+.comment {
+  background-color: #e3e9f4;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.success {
+  margin-top: 20px;
+  background-color: darkseagreen;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 500;
+}
+
+.error {
+  margin-top: 20px;
+  background-color: crimson;
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 500;
+}
+
+.right {
+  width: calc(100% - 650px);
+  padding: 20px;
+  text-align: left;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.statusRgb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.right span {
+  font-weight: 400;
+}
+
+.status span {
+  margin-left: 5px;
+}
+
+.resolutionDate span {
+  margin-left: 5px;
+}
+
+.tags div {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 0 5px;
+  width: max-content;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.initiatorName {
+  margin-top: 50px
+}
