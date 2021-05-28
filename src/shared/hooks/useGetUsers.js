@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react"
 
-export const useGetTags = (url) => {
-  const [tags, setTags] = useState([]);
+export const useGetUsers = (url) => {
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const getTags = async () => {
+    const getUsers = async () => {
       const res = await fetch(url)
       const json = await res.json();
       return await json
     }
-    getTags()
+    getUsers()
     .then(res => {
-      setTags(res)
+      setUsers(res)
+      localStorage.setItem('users', JSON.stringify(res))
     })
     .catch(err => {
       console.log(err)
     })
   }, [url])
 
-  return tags
+  return users
 }

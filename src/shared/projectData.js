@@ -25,11 +25,11 @@ export const navLinks = [
   },
   {
     id: 3,
-    path: '/requests',
+    path: '/tasks',
     title: 'Заявки',
     thumbnail: {
       src: requests,
-      alt: 'Requests',
+      alt: 'Tasks',
     },
   },
   {

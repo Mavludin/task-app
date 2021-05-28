@@ -4,8 +4,11 @@ export const useGetTasks = (url) => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
+    const abortCtrl = new AbortController();
+    const opts = { signal: abortCtrl.signal };
+
     const getTasks = async () => {
-      const res = await fetch(url)
+      const res = await fetch(url, opts)
       const json = await res.json();
       return await json.value
     }
@@ -16,6 +19,8 @@ export const useGetTasks = (url) => {
     .catch(err => {
       console.log(err)
     })
+
+    return () => abortCtrl.abort()
   }, [url])
 
   return tasks

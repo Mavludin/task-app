@@ -1,31 +1,52 @@
 import React from "react";
-import { useGetPriorities } from "../../hooks/useGetPriorities";
-import { useGetStatuses } from "../../hooks/useGetStatuses";
-import { useGetTasks } from "../../hooks/useGetTasks";
-import { prioritiesUrl, singleTaskUrl, statusesUrl, tasksUrl } from "../../shared/endpoints";
+import { useGetPriorities } from "../../shared/hooks/useGetPriorities";
+import { useGetStatuses } from "../../shared/hooks/useGetStatuses";
+import { useGetTasks } from "../../shared/hooks/useGetTasks";
+import { useGetUsers } from "../../shared/hooks/useGetUsers";
 import styles from "./Tasks.module.css";
+import { useGetTags } from "../../shared/hooks/useGetTags";
+import {
+  prioritiesUrl,
+  singleTaskUrl,
+  statusesUrl,
+  tagsUrl,
+  tasksUrl,
+  usersUrl,
+} from "../../shared/endpoints";
 
-export const Tasks = ({ setShowForm, setSelectedTask, setShowEditForm }) => {
+export const Tasks = ({
+  setShowCraeteForm,
+  setSelectedTask,
+  setShowEditForm,
+  showEditForm,
+}) => {
   const tasks = useGetTasks(tasksUrl);
+
+  // Длаем запросы по 1 разу и кэшируем в localStorage
   const priorities = useGetPriorities(prioritiesUrl);
   const statuses = useGetStatuses(statusesUrl);
+  useGetUsers(usersUrl);
+  useGetTags(tagsUrl)
 
+  // Выбираем нажатую заявку из таблицы и делаем запрос по ID
   const selectTask = (task) => {
-    fetch(singleTaskUrl + '/' + task.id)
+    fetch(singleTaskUrl + "/" + task.id)
       .then(async (res) => {
-        setSelectedTask(await res.json())
-        setShowEditForm(true)
+        setSelectedTask(await res.json());
+        if (!showEditForm) setShowEditForm(true);
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   return (
     <main className={styles.tasks}>
-      <button className="blueBtn" onClick={() => setShowForm(true)}>
-        Создать заявку
-      </button>
+      <div style={{width: '50%'}}>
+        <button className="blueBtn" onClick={() => setShowCraeteForm(true)}>
+          Создать заявку
+        </button>
+      </div>
 
       {tasks.length > 0 ? (
         <>
@@ -35,14 +56,14 @@ export const Tasks = ({ setShowForm, setSelectedTask, setShowEditForm }) => {
                 <th width="5%" className={styles.withBorder}>
                   ID
                 </th>
-                <th width="20%" className={styles.withBorder}>
+                <th width="25%" className={styles.withBorder}>
                   Название
                 </th>
                 <th width="10%" className={styles.withBorder}>
                   Статус
                 </th>
                 <th width="10%">Исполнитель</th>
-                <th width="55%" className={styles.empty}></th>
+                <th width="50%" className={styles.empty}></th>
               </tr>
             </thead>
           </table>
@@ -74,7 +95,7 @@ export const Tasks = ({ setShowForm, setSelectedTask, setShowEditForm }) => {
 
                         {task.taskTypeId}
                       </td>
-                      <td width="20%">{task.name}</td>
+                      <td width="25%">{task.name}</td>
                       <td width="10%">
                         {statuses.map((status) => {
                           if (task.statusId === status.id) {
@@ -91,7 +112,7 @@ export const Tasks = ({ setShowForm, setSelectedTask, setShowEditForm }) => {
                         })}
                       </td>
                       <td width="10%">{task.executorName}</td>
-                      <td width="55%" className={styles.empty}></td>
+                      <td width="50%" className={styles.empty}></td>
                     </tr>
                   );
                 })}

@@ -52,14 +52,6 @@
   width: 32px
 }
 
-.success {
-  margin-top: 20px;
-  background-color: darkseagreen;
-  border-radius: 10px;
-  padding: 10px;
-  font-weight: 500;
-}
-
 .error {
   margin-top: 20px;
   background-color: crimson;
