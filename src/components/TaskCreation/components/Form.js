@@ -2,32 +2,39 @@ import React, { useState } from "react";
 import styles from "./../TaskCreation.module.css";
 import { singleTaskUrl } from "../../../shared/endpoints";
 import loader from "./../../../assets/img/oval.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { showEditForm } from "../../../store/slices/editForm";
+import { hideCreateForm } from "../../../store/slices/createForm";
+import { getTask, singleTaskStatus } from "../../../store/slices/task";
 
-export const Form = ({ setShowCraeteForm, setSelectedTask, setShowEditForm }) => {
-  const [taskName, setTaskName] = useState("");
-  const [taskDesc, setTaskDesc] = useState("");
+export const Form = () => {
+
   const [pending, setPending] = useState(false);
   const [postSuccess, setPostSuccess] = useState("");
 
+  const [taskName, setTaskName] = useState("");
   const handleTaskNameChange = (e) => {
     setTaskName(e.target.value);
   };
 
+  const [taskDesc, setTaskDesc] = useState("");
   const handleTaskDescChange = (e) => {
     setTaskDesc(e.target.value);
   };
 
+  const dispatch = useDispatch()
+  const taskStatus = useSelector(singleTaskStatus)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Задаем какие-то значения статуса, приоритета, и тегов
+    // Задаем какие-то значения статуса b приоритета
     const priorityId = JSON.parse(localStorage.getItem("priorities")).find(
       (item) => item.name === "Средний"
     ).id;
     const statusId = JSON.parse(localStorage.getItem("statuses")).find(
       (item) => item.name === "Открыта"
     ).id;
-    const tags = JSON.parse(localStorage.getItem("tags"))
 
     const taskObj = {
       name: taskName,
@@ -39,7 +46,7 @@ export const Form = ({ setShowCraeteForm, setSelectedTask, setShowEditForm }) =>
       priorityId,
       serviceId: 43804,
       resolutionDatePlan: new Date(Date.now() + 7200 * 1000 * 24),
-      tags: tags.map((tag) => tag.id),
+      tags: [],
       initiatorId: 43806,
       executorId: 43806,
       executorGroupId: 43804,
@@ -58,12 +65,19 @@ export const Form = ({ setShowCraeteForm, setSelectedTask, setShowEditForm }) =>
     if (res.ok) {
       const id = await res.json();
 
-      const createdTask = await fetch(singleTaskUrl + "/" + id);
-      const taskJson = await createdTask.json();
-      setSelectedTask(taskJson);
-      setShowEditForm(true);
-      setPending(false);
-      setShowCraeteForm(false);
+      if (taskStatus === 'idle') {
+        dispatch(getTask(id))
+        .then(() => {
+          dispatch(showEditForm())
+          setPending(false);
+          dispatch(hideCreateForm())
+        })
+        .catch(() => {
+          setPending(false);
+          setPostSuccess(0);
+        })
+      } 
+
     } else {
       setPending(false);
       setPostSuccess(0);

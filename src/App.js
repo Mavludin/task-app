@@ -3,44 +3,26 @@ import "./App.css";
 import { Header } from "./components/Header/Header";
 import { Nav } from "./components/Nav/Nav";
 import { TaskCreation } from "./components/TaskCreation/TaskCreation";
-import { useState } from "react";
 import { TaskEdit } from "./components/TaskEdit/TaskEdit";
 import { Routes } from "./components/Routes/Routes";
+import { useSelector } from "react-redux";
+import { createFormVisibility } from "./store/slices/createForm";
+import { editFormVisibility } from "./store/slices/editForm";
 
 export const App = () => {
-  const [showCreateForm, setShowCraeteForm] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [selectedTask, setSelectedTask] = useState({});
+
+  const isEditFormVisible = useSelector(editFormVisibility)
+  const isCreateFormVisible = useSelector(createFormVisibility)
 
   return (
     <BrowserRouter>
       <div className="App">
         <Nav />
         <div className="mainBlock">
-          {showCreateForm && (
-            <TaskCreation
-              setSelectedTask={setSelectedTask}
-              setShowCraeteForm={setShowCraeteForm}
-              setShowEditForm={setShowEditForm}
-            />
-          )}
-
-          {showEditForm && (
-            <TaskEdit
-              selectedTask={selectedTask}
-              setShowEditForm={setShowEditForm}
-            />
-          )}
-
+          { isCreateFormVisible && <TaskCreation /> }
+          { isEditFormVisible && <TaskEdit /> }
           <Header />
-
-          <Routes
-            setShowCraeteForm={setShowCraeteForm}
-            setSelectedTask={setSelectedTask}
-            setShowEditForm={setShowEditForm}
-            showEditForm={showEditForm}
-          />
-
+          <Routes />
         </div>
       </div>
     </BrowserRouter>

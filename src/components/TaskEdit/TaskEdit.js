@@ -4,15 +4,19 @@ import close from "./../../assets/img/close.png";
 import { singleTaskUrl } from "../../shared/endpoints";
 import { RightFormSide } from "./components/RightFormSide";
 import { LeftFormSide } from "./components/LeftFormSide";
+import { useDispatch, useSelector } from "react-redux";
+import { hideEditForm } from "../../store/slices/editForm";
+import { taskSelection } from "../../store/slices/task";
+import { getTasks } from "../../store/slices/tasks";
 
-export const TaskEdit = ({ setShowEditForm, selectedTask }) => {
+export const TaskEdit = () => {
+
   const [taskComment, setTaskComment] = useState("");
-  const [postSuccess, setPostSuccess] = useState("");
-  const [pending, setPending] = useState(false);
-
   const handleTaskCommentChange = (e) => {
     setTaskComment(e.target.value);
   };
+
+  const selectedTask = useSelector(taskSelection)
 
   // Берем статусы из localStorage и инициализируем state
   const statuses = JSON.parse(localStorage.getItem("statuses"));
@@ -28,6 +32,10 @@ export const TaskEdit = ({ setShowEditForm, selectedTask }) => {
   });
   const [showUserList, setShowUserList] = useState(false);
 
+  // Стейт для отслеживания состояния запроса
+  const [postSuccess, setPostSuccess] = useState("");
+  const [pending, setPending] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -42,7 +50,7 @@ export const TaskEdit = ({ setShowEditForm, selectedTask }) => {
       priorityId: selectedTask.priorityId,
       serviceId: selectedTask.serviceId,
       resolutionDatePlan: selectedTask.resolutionDatePlan,
-      tags: selectedTask.tags.map((tag) => tag.id),
+      tags: [],
       initiatorId: selectedTask.initiatorId,
       executorId: user.id,
       executorGroupId: selectedTask.executorGroupId,
@@ -59,7 +67,10 @@ export const TaskEdit = ({ setShowEditForm, selectedTask }) => {
     })
       .then((res) => {
         if (!res.ok) setPostSuccess(0);
-        else setPostSuccess(1);
+        else {
+          setPostSuccess(1);
+          dispatch(getTasks())
+        }
         setPending(false);
       })
       .catch((err) => {
@@ -69,39 +80,41 @@ export const TaskEdit = ({ setShowEditForm, selectedTask }) => {
       });
   };
 
+  const dispatch = useDispatch();
+
   return (
     <div className={styles.taskEdit}>
       <header className={styles.header}>
         <span className={styles.taskNumber}>№ {selectedTask.id}</span>
         <span className={styles.taskName}>{selectedTask.name}</span>
         <button>
-          <img src={close} alt="Close" onClick={() => setShowEditForm(false)} />
+          <img src={close} alt="Close" onClick={() => dispatch(hideEditForm())} />
         </button>
       </header>
 
       <div className={styles.formCover}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <LeftFormSide
-            handleTaskCommentChange = {handleTaskCommentChange}
-            selectedTask = {selectedTask}
-            taskComment = {taskComment}
-            pending = {pending}
-            postSuccess = {postSuccess}
+            handleTaskCommentChange={handleTaskCommentChange}
+            selectedTask={selectedTask}
+            taskComment={taskComment}
+            pending={pending}
+            postSuccess={postSuccess}
           />
         </form>
 
         <RightFormSide
-          selectedTask = {selectedTask}
-          statuses = {statuses}
-          users = {users}
-          setShowStatusList = {setShowStatusList}
-          showStatusList = {showStatusList}
-          setStatus = {setStatus}
-          setUser = {setUser}
-          status = {status}
-          setShowUserList = {setShowUserList}
-          user = {user}
-          showUserList = {showUserList}
+          selectedTask={selectedTask}
+          statuses={statuses}
+          users={users}
+          setShowStatusList={setShowStatusList}
+          showStatusList={showStatusList}
+          setStatus={setStatus}
+          setUser={setUser}
+          status={status}
+          setShowUserList={setShowUserList}
+          user={user}
+          showUserList={showUserList}
         />
       </div>
     </div>

@@ -1,54 +1,55 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetPriorities } from "../../shared/hooks/useGetPriorities";
 import { useGetStatuses } from "../../shared/hooks/useGetStatuses";
-import { useGetTasks } from "../../shared/hooks/useGetTasks";
 import { useGetUsers } from "../../shared/hooks/useGetUsers";
 import styles from "./Tasks.module.css";
-import { useGetTags } from "../../shared/hooks/useGetTags";
 import {
   prioritiesUrl,
-  singleTaskUrl,
   statusesUrl,
-  tagsUrl,
-  tasksUrl,
   usersUrl,
 } from "../../shared/endpoints";
+import { useDispatch, useSelector } from "react-redux";
+import { showCreateForm } from "../../store/slices/createForm";
+import { editFormVisibility, showEditForm } from "../../store/slices/editForm";
+import { getTask } from "../../store/slices/task";
+import { getTasks, taskListStatus, taskList } from "../../store/slices/tasks";
 
-export const Tasks = ({
-  setShowCraeteForm,
-  setSelectedTask,
-  setShowEditForm,
-  showEditForm,
-}) => {
-  const tasks = useGetTasks(tasksUrl);
+export const Tasks = () => {
+
+  // Запрос на получение заявок
+  const dispatch = useDispatch();
+  const tasksStatus = useSelector(taskListStatus)
+  const tasks = useSelector(taskList)
+
+  useEffect(() => {
+    if (tasksStatus === "idle") {
+      dispatch(getTasks());
+    }
+  }, [tasksStatus, dispatch]);
 
   // Длаем запросы по 1 разу и кэшируем в localStorage
+  // юзеров, приоритеты, и статусы
   const priorities = useGetPriorities(prioritiesUrl);
   const statuses = useGetStatuses(statusesUrl);
   useGetUsers(usersUrl);
-  useGetTags(tagsUrl)
 
   // Выбираем нажатую заявку из таблицы и делаем запрос по ID
-  const selectTask = (task) => {
-    fetch(singleTaskUrl + "/" + task.id)
-      .then(async (res) => {
-        setSelectedTask(await res.json());
-        if (!showEditForm) setShowEditForm(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const isEditFormVisible = useSelector(editFormVisibility)
+  const handleTaskSelection = (task) => {
+    dispatch(getTask(task.id)).then(() => {
+      if (!isEditFormVisible) dispatch(showEditForm());
+    })
   };
 
   return (
     <main className={styles.tasks}>
       <div style={{width: '50%'}}>
-        <button className="blueBtn" onClick={() => setShowCraeteForm(true)}>
+        <button className="blueBtn" onClick={() => dispatch(showCreateForm())}>
           Создать заявку
         </button>
       </div>
 
-      {tasks.length > 0 ? (
+      {tasksStatus === 'success' ? (
         <>
           <table className={styles.tableHead}>
             <thead>
@@ -72,7 +73,7 @@ export const Tasks = ({
               <tbody>
                 {tasks.map((task) => {
                   return (
-                    <tr key={task.id} onClick={() => selectTask(task)}>
+                    <tr key={task.id} onClick={() => handleTaskSelection(task)}>
                       <td width="5%">
                         {priorities.map((prio) => {
                           if (task.priorityId === prio.id) {

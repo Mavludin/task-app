@@ -23,7 +23,6 @@ export const LeftFormSide = ({
           rows="8"
           onChange={handleTaskCommentChange}
           value={taskComment}
-          required
         />
       </div>
       <div className={styles.submitSection}>
