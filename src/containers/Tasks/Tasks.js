@@ -28,7 +28,7 @@ export const Tasks = () => {
   }, [tasksStatus, dispatch]);
 
   // Длаем запросы по 1 разу и кэшируем в localStorage
-  // юзеров, приоритеты, и статусы
+  // юзеры, приоритеты, и статусы
   const priorities = useGetPriorities(prioritiesUrl);
   const statuses = useGetStatuses(statusesUrl);
   useGetUsers(usersUrl);

@@ -6,7 +6,7 @@ import { RightFormSide } from "./components/RightFormSide";
 import { LeftFormSide } from "./components/LeftFormSide";
 import { useDispatch, useSelector } from "react-redux";
 import { hideEditForm } from "../../store/slices/editForm";
-import { taskSelection } from "../../store/slices/task";
+import { getTask, taskSelection } from "../../store/slices/task";
 import { getTasks } from "../../store/slices/tasks";
 
 export const TaskEdit = () => {
@@ -69,6 +69,7 @@ export const TaskEdit = () => {
         if (!res.ok) setPostSuccess(0);
         else {
           setPostSuccess(1);
+          dispatch(getTask(selectedTask.id))
           dispatch(getTasks())
         }
         setPending(false);
