@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import styles from "./../TaskCreation.module.css";
 import { singleTaskUrl } from "../../../shared/endpoints";
 import loader from "./../../../assets/img/oval.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showEditForm } from "../../../store/slices/editForm";
 import { hideCreateForm } from "../../../store/slices/createForm";
-import { getTask, singleTaskStatus } from "../../../store/slices/task";
+import { getTask } from "../../../store/slices/task";
+import { getTasks } from "../../../store/slices/tasks";
 
 export const Form = () => {
 
@@ -23,7 +24,6 @@ export const Form = () => {
   };
 
   const dispatch = useDispatch()
-  const taskStatus = useSelector(singleTaskStatus)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,18 +65,18 @@ export const Form = () => {
     if (res.ok) {
       const id = await res.json();
 
-      if (taskStatus === 'idle') {
-        dispatch(getTask(id))
-        .then(() => {
-          dispatch(showEditForm())
-          setPending(false);
-          dispatch(hideCreateForm())
-        })
-        .catch(() => {
-          setPending(false);
-          setPostSuccess(0);
-        })
-      } 
+      dispatch(getTasks())
+      
+      dispatch(getTask(id))
+      .then(() => {
+        dispatch(showEditForm())
+        setPending(false);
+        dispatch(hideCreateForm())
+      })
+      .catch(() => {
+        setPending(false);
+        setPostSuccess(0);
+      })
 
     } else {
       setPending(false);
@@ -106,6 +106,9 @@ export const Form = () => {
           required
         />
       </div>
+      {postSuccess === 0 && (
+        <div className={styles.error}>Произошла ошибка</div>
+      )}
       <div className={styles.submitSection}>
         <button
           style={{ cursor: pending && "not-allowed" }}
@@ -117,9 +120,6 @@ export const Form = () => {
         </button>
         {pending && <img src={loader} alt="loader" className={styles.loader} />}
       </div>
-      {postSuccess === 0 && (
-        <div className={styles.error}>Произошла ошибка</div>
-      )}
     </form>
   );
 };

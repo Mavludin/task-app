@@ -36,6 +36,13 @@ export const LeftFormSide = ({
         </button>
         {pending && <img src={loader} alt="loader" className={styles.loader} />}
       </div>
+      {postSuccess === 1 && (
+        <div className={styles.success}>Заявка успешно изменена</div>
+      )}
+
+      {postSuccess === 0 && (
+        <div className={styles.error}>Произошла ошибка</div>
+      )}
       <div className={styles.commentarySection}>
         {selectedTask.lifetimeItems.map((item) => {
           if (item.comment) {
@@ -59,13 +66,7 @@ export const LeftFormSide = ({
           } else return null;
         })}
       </div>
-      {postSuccess === 1 && (
-        <div className={styles.success}>Заявка успешно изменена</div>
-      )}
 
-      {postSuccess === 0 && (
-        <div className={styles.error}>Произошла ошибка</div>
-      )}
     </>
   );
 };

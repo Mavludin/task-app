@@ -3,7 +3,7 @@
 }
 
 .tableSection {
-  overflow-y: auto;
+  overflow: auto;
   max-height: calc(100vh - 166px);
 }
 
@@ -35,6 +35,31 @@ tbody tr {
 tbody tr:hover {
   cursor: pointer;
   background-color: aliceblue;
+}
+
+tbody tr td:first-of-type,
+thead tr th:first-of-type {
+  width: 90px;
+}
+
+tbody tr td:nth-child(2),
+thead tr th:nth-child(2) {
+  width: 450px;
+}
+
+tbody tr td:nth-child(3),
+thead tr th:nth-child(3) {
+  width: 180px;
+}
+
+tbody tr td:nth-child(4),
+thead tr th:nth-child(4) {
+  width: 180px;
+}
+
+tbody tr td:last-of-type,
+thead tr th:last-of-type {
+  width: calc(100% - 900px);
 }
 
 .withBorder {

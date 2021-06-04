@@ -46,13 +46,13 @@ export const TaskEdit = () => {
       comment: taskComment,
       price: selectedTask.price,
       taskTypeId: selectedTask.taskTypeId,
-      statusId: status.id,
+      statusId: selectedTask.statusId,
       priorityId: selectedTask.priorityId,
       serviceId: selectedTask.serviceId,
       resolutionDatePlan: selectedTask.resolutionDatePlan,
       tags: [],
       initiatorId: selectedTask.initiatorId,
-      executorId: user.id,
+      executorId: selectedTask.executorId,
       executorGroupId: selectedTask.executorGroupId,
     };
 

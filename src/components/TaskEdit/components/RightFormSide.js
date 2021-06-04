@@ -1,6 +1,11 @@
 import React from "react";
 import styles from "./../TaskEdit.module.css";
 import calendar from "./../../../assets/img/calendar.png";
+import { singleTaskUrl } from "../../../shared/endpoints";
+import { useDispatch } from "react-redux";
+import { getTasks } from "../../../store/slices/tasks";
+import { getTask } from "../../../store/slices/task";
+import closeIcon from './../../../assets/img/close.svg'
 
 export const RightFormSide = ({
   selectedTask,
@@ -15,41 +20,125 @@ export const RightFormSide = ({
   user,
   showUserList,
 }) => {
+
+  const dispatch = useDispatch()
+
   const handleStatusChange = (e) => {
     setStatus(statuses[e.target.selectedIndex]);
+
+    const taskObj = {
+      id: selectedTask.id,
+      name: selectedTask.name,
+      description: selectedTask.description,
+      comment: selectedTask.comment,
+      price: selectedTask.price,
+      taskTypeId: selectedTask.taskTypeId,
+      statusId: statuses[e.target.selectedIndex].id,
+      priorityId: selectedTask.priorityId,
+      serviceId: selectedTask.serviceId,
+      resolutionDatePlan: selectedTask.resolutionDatePlan,
+      tags: [],
+      initiatorId: selectedTask.initiatorId,
+      executorId: selectedTask.executorId,
+      executorGroupId: selectedTask.executorGroupId,
+    };
+
+    fetch(singleTaskUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(taskObj),
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(getTask(selectedTask.id))
+          dispatch(getTasks())
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleUserChange = (e) => {
     setUser(users[e.target.selectedIndex]);
+
+    const taskObj = {
+      id: selectedTask.id,
+      name: selectedTask.name,
+      description: selectedTask.description,
+      comment: selectedTask.comment,
+      price: selectedTask.price,
+      taskTypeId: selectedTask.taskTypeId,
+      statusId: selectedTask.statusId,
+      priorityId: selectedTask.priorityId,
+      serviceId: selectedTask.serviceId,
+      resolutionDatePlan: selectedTask.resolutionDatePlan,
+      tags: [],
+      initiatorId: selectedTask.initiatorId,
+      executorId: users[e.target.selectedIndex].id,
+      executorGroupId: selectedTask.executorGroupId,
+    };
+
+    fetch(singleTaskUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(taskObj),
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(getTask(selectedTask.id))
+          dispatch(getTasks())
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <div className={styles.right}>
       <div className={styles.status}>
-        <div
-          className={styles.statusRgb}
-          style={{ backgroundColor: selectedTask.statusRgb }}
-        ></div>
-        <span>{selectedTask.statusName}</span>
-        <button
-          className={styles.changeBtn}
-          onClick={() => setShowStatusList(true)}
-        >
-          Изменить
-        </button>
+        <div>
+          <div
+            className={styles.statusRgb}
+            style={{ backgroundColor: selectedTask.statusRgb }}
+          ></div>
+          <span>{selectedTask.statusName}</span>
+        </div>
+        {!showStatusList && (
+          <button
+            className={styles.changeBtn}
+            onClick={() => setShowStatusList(true)}
+          >
+            Изменить
+          </button>
+        )}
 
         {showStatusList && (
-          <form>
-            <select value={status.name} onChange={handleStatusChange}>
-              {statuses.map((status) => {
-                return (
-                  <option key={status.id} value={status.name}>
-                    {status.name}
-                  </option>
-                );
-              })}
-            </select>
-          </form>
+          <>
+            <form>
+              <select value={status.name} onChange={handleStatusChange}>
+                {statuses.map((status) => {
+                  return (
+                    <option key={status.id} value={status.name}>
+                      {status.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <button
+                type="button"
+                onClick={() => setShowStatusList(false)}
+                className={styles.close}
+              >
+              <img src={closeIcon} alt="close" />
+              </button>
+            </form>
+          </>
         )}
       </div>
       <div className={styles.creatorName}>
@@ -64,24 +153,36 @@ export const RightFormSide = ({
       <div className={styles.executor}>
         <h4>Исполнитель</h4>
         <span>{selectedTask.executorName}</span>
-        <button
-          className={styles.changeBtn}
-          onClick={() => setShowUserList(true)}
-        >
-          Изменить
-        </button>
+        {!showUserList && (
+          <button
+            className={styles.changeBtn}
+            onClick={() => setShowUserList(true)}
+          >
+            Изменить
+          </button>
+        )}
+
         {showUserList && (
-          <form>
-            <select value={user.name} onChange={handleUserChange}>
-              {users.map((user) => {
-                return (
-                  <option key={user.id} value={user.name}>
-                    {user.name}
-                  </option>
-                );
-              })}
-            </select>
-          </form>
+          <>
+            <form>
+              <select value={user.name} onChange={handleUserChange}>
+                {users.map((user) => {
+                  return (
+                    <option key={user.id} value={user.name}>
+                      {user.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <button
+                type="button"
+                onClick={() => setShowUserList(false)}
+                className={styles.close}
+              >
+                <img src={closeIcon} alt="close" />
+              </button>
+            </form>
+          </>
         )}
       </div>
       <div className={styles.priority}>

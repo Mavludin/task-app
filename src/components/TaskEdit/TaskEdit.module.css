@@ -2,7 +2,7 @@
   height: calc(100vh - 65px);
   width: 980px;
   background-color: #ecf3f7;
-  position: fixed;
+  position: absolute;
   right: 0;
   bottom: 0;
   z-index: 100;
@@ -116,21 +116,22 @@
   text-align: left;
 }
 
-.status {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+.right form {
+  width: 100%;
 }
 
 .statusRgb {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  display: inline-block;
 }
 
 .changeBtn {
   text-decoration: underline;
-  color: #008cf0
+  color: #008cf0;
+  display: block;
+  padding: 0;
 }
 
 .right span {
@@ -157,4 +158,43 @@
 
 .initiatorName {
   margin-top: 50px
+}
+
+select {
+  padding: 2px;
+  outline: unset;
+  border: 1px solid #909090;
+  border-radius: 6px;
+  font-size: 16px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background: url('./../../assets//img//down-arrow.svg') no-repeat right;
+  background-size: 14px;
+  background-position-x: 98%;
+  width: 100%;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:focus {
+  border: 1px solid #008cf0
+}
+
+select option {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+select + button {
+  position: absolute;
+  top: 0px;
+  right: -26px;
+  padding: 0;
+}
+
+select + button img {
+  width: 26px;
 }
