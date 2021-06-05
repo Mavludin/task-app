@@ -1,17 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./../TaskEdit.module.css";
 import loader from "./../../../assets/img/oval.svg";
 import circle from "./../../../assets/img/circle.png";
+import { useDispatch, useSelector } from "react-redux";
+import { editTask, getTask, selectPutStatus, taskSelection } from "../../../store/slices/task";
 
-export const LeftFormSide = ({
-  handleTaskCommentChange,
-  selectedTask,
-  taskComment,
-  pending,
-  postSuccess,
-}) => {
+export const LeftFormSide = () => {
+
+  const [taskComment, setTaskComment] = useState("");
+  const handleTaskCommentChange = (e) => {
+    setTaskComment(e.target.value);
+  };
+
+  const taskStatus = useSelector(selectPutStatus)
+  const selectedTask = useSelector(taskSelection)
+  const dispatch = useDispatch();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const taskObj = { 
+      id: selectedTask.id,
+      name: selectedTask.name,
+      description: selectedTask.description,
+      comment: taskComment,
+      price: selectedTask.price,
+      taskTypeId: selectedTask.taskTypeId,
+      statusId: selectedTask.statusId,
+      priorityId: selectedTask.priorityId,
+      serviceId: selectedTask.serviceId,
+      resolutionDatePlan: selectedTask.resolutionDatePlan,
+      tags: [],
+      initiatorId: selectedTask.initiatorId,
+      executorId: selectedTask.executorId,
+      executorGroupId: selectedTask.executorGroupId,
+    };
+
+    dispatch(editTask(taskObj)).then(() => {
+      dispatch(getTask(selectedTask.id))
+    })
+  };
+
   return (
-    <>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.descriptionSection}>
         <h4>Описание</h4>
         <p className={styles.taskDesc}>{selectedTask.description}</p>
@@ -27,20 +57,20 @@ export const LeftFormSide = ({
       </div>
       <div className={styles.submitSection}>
         <button
-          style={{ cursor: pending && "not-allowed" }}
-          disabled={pending}
+          style={{ cursor: taskStatus === 'loading' && "not-allowed" }}
+          disabled={taskStatus === 'loading'}
           type="submit"
           className="blueBtn"
         >
           Сохранить
         </button>
-        {pending && <img src={loader} alt="loader" className={styles.loader} />}
+        {taskStatus === 'loading' && <img src={loader} alt="loader" className={styles.loader} />}
       </div>
-      {postSuccess === 1 && (
+      {taskStatus === 'success' && (
         <div className={styles.success}>Заявка успешно изменена</div>
       )}
 
-      {postSuccess === 0 && (
+      {taskStatus === 'failed' && (
         <div className={styles.error}>Произошла ошибка</div>
       )}
       <div className={styles.commentarySection}>
@@ -67,6 +97,6 @@ export const LeftFormSide = ({
         })}
       </div>
 
-    </>
+    </form>
   );
 };

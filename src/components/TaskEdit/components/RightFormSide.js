@@ -1,29 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./../TaskEdit.module.css";
 import calendar from "./../../../assets/img/calendar.png";
-import { singleTaskUrl } from "../../../shared/endpoints";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../../store/slices/tasks";
-import { getTask } from "../../../store/slices/task";
+import { editTask, getTask, taskSelection } from "../../../store/slices/task";
 import closeIcon from './../../../assets/img/close.svg'
 
-export const RightFormSide = ({
-  selectedTask,
-  statuses,
-  users,
-  setShowStatusList,
-  showStatusList,
-  setStatus,
-  setUser,
-  status,
-  setShowUserList,
-  user,
-  showUserList,
-}) => {
+export const RightFormSide = () => {
+
+  const selectedTask = useSelector(taskSelection)
+
+  // Берем статусы из localStorage и инициализируем state
+  const statuses = JSON.parse(localStorage.getItem("statuses"));
+  const [status, setStatus] = useState(() => {
+    return statuses.find((status) => status.id === selectedTask.statusId);
+  });
+  const [showStatusList, setShowStatusList] = useState(false);
+
+  // Берем users из localStorage и инициализируем state
+  const users = JSON.parse(localStorage.getItem("users"));
+  const [user, setUser] = useState(() => {
+    return users.find((user) => user.id === selectedTask.executorId);
+  });
+  const [showUserList, setShowUserList] = useState(false);
 
   const dispatch = useDispatch()
 
   const handleStatusChange = (e) => {
+    e.preventDefault()
+    
     setStatus(statuses[e.target.selectedIndex]);
 
     const taskObj = {
@@ -43,22 +48,10 @@ export const RightFormSide = ({
       executorGroupId: selectedTask.executorGroupId,
     };
 
-    fetch(singleTaskUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(taskObj),
+    dispatch(editTask(taskObj)).then(() => {
+      dispatch(getTask(selectedTask.id))
+      dispatch(getTasks())
     })
-      .then((res) => {
-        if (res.ok) {
-          dispatch(getTask(selectedTask.id))
-          dispatch(getTasks())
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const handleUserChange = (e) => {
@@ -81,22 +74,10 @@ export const RightFormSide = ({
       executorGroupId: selectedTask.executorGroupId,
     };
 
-    fetch(singleTaskUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(taskObj),
+    dispatch(editTask(taskObj)).then(() => {
+      dispatch(getTask(selectedTask.id))
+      dispatch(getTasks())
     })
-      .then((res) => {
-        if (res.ok) {
-          dispatch(getTask(selectedTask.id))
-          dispatch(getTasks())
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (

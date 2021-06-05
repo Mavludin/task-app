@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import styles from "./../TaskCreation.module.css";
-import { singleTaskUrl } from "../../../shared/endpoints";
 import loader from "./../../../assets/img/oval.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showEditForm } from "../../../store/slices/editForm";
 import { hideCreateForm } from "../../../store/slices/createForm";
-import { getTask } from "../../../store/slices/task";
+import {
+  createTask,
+  getTask,
+  selectPostStaus,
+} from "../../../store/slices/task";
 import { getTasks } from "../../../store/slices/tasks";
 
 export const Form = () => {
-
-  const [pending, setPending] = useState(false);
-  const [postSuccess, setPostSuccess] = useState("");
-
   const [taskName, setTaskName] = useState("");
   const handleTaskNameChange = (e) => {
     setTaskName(e.target.value);
@@ -23,9 +22,12 @@ export const Form = () => {
     setTaskDesc(e.target.value);
   };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
+  const postTaskStatus = useSelector(selectPostStaus);
+  const loading = postTaskStatus === "loading";
+  const failed = postTaskStatus === "failed";
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     // Задаем какие-то значения статуса b приоритета
@@ -52,36 +54,15 @@ export const Form = () => {
       executorGroupId: 43804,
     };
 
-    setPending(true);
-
-    const res = await fetch(singleTaskUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(taskObj),
-    });
-
-    if (res.ok) {
-      const id = await res.json();
-
-      dispatch(getTasks())
-      
-      dispatch(getTask(id))
-      .then(() => {
-        dispatch(showEditForm())
-        setPending(false);
-        dispatch(hideCreateForm())
+    dispatch(createTask(taskObj))
+      .then(({ payload }) => {
+        dispatch(getTasks());
+        dispatch(getTask(payload)).then(() => {
+          dispatch(showEditForm());
+          dispatch(hideCreateForm());
+        });
       })
-      .catch(() => {
-        setPending(false);
-        setPostSuccess(0);
-      })
-
-    } else {
-      setPending(false);
-      setPostSuccess(0);
-    }
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -106,19 +87,17 @@ export const Form = () => {
           required
         />
       </div>
-      {postSuccess === 0 && (
-        <div className={styles.error}>Произошла ошибка</div>
-      )}
+      {failed && <div className={styles.error}>Произошла ошибка</div>}
       <div className={styles.submitSection}>
         <button
-          style={{ cursor: pending && "not-allowed" }}
-          disabled={pending}
+          style={{ cursor: loading && "not-allowed" }}
+          disabled={loading}
           type="submit"
           className="blueBtn"
         >
           Сохранить
         </button>
-        {pending && <img src={loader} alt="loader" className={styles.loader} />}
+        {loading && <img src={loader} alt="loader" className={styles.loader} />}
       </div>
     </form>
   );

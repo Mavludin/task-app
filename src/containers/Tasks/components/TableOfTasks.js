@@ -11,7 +11,6 @@ import { getTask } from "../../../store/slices/task";
 import { taskList } from "../../../store/slices/tasks";
 
 export const TableOfTasks = () => {
-  
   // Длаем запросы по 1 разу и кэшируем в localStorage
   // юзеры, приоритеты, и статусы
   const priorities = useGetPriorities(prioritiesUrl);

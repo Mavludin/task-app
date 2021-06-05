@@ -21,8 +21,8 @@ const tasksSlice = createSlice({
       state.status = "loading";
     },
     [getTasks.fulfilled]: (state, { payload }) => {
-      state.tasks = payload;
       state.status = "success";
+      state.tasks = payload;
     },
     [getTasks.rejected]: (state) => {
       state.status = "failed";
