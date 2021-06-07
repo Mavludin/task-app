@@ -1,10 +1,10 @@
-import logo from './../assets/img/logo.png';
-import kBase from './../assets/img/k-base.png';
-import requests from './../assets/img/requests.png';
-import staff from './../assets/img/staff.png';
-import clients from './../assets/img/clients.png';
-import assets from './../assets/img/assets.png';
-import settings from './../assets/img/settings.png';
+import logo from './../../assets/img/logo.png';
+import kBase from './../../assets/img/k-base.png';
+import requests from './../../assets/img/requests.png';
+import staff from './../../assets/img/staff.png';
+import clients from './../../assets/img/clients.png';
+import assets from './../../assets/img/assets.png';
+import settings from './../../assets/img/settings.png';
 
 export const navLinks = [
   {

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { tasksUrl } from "../../shared/endpoints";
+import { tasksUrl } from "../../shared/main/endpoints";
 
 const initialState = {
   tasks: [],

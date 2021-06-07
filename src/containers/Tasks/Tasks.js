@@ -8,9 +8,9 @@ import {
 } from "../../store/slices/createForm";
 import { editFormVisibility, hideEditForm } from "../../store/slices/editForm";
 import { getTasks, taskListStatus } from "../../store/slices/tasks";
-import { TableOfTasks } from "./components/TableOfTasks";
 import { TaskCreation } from "../../components/TaskCreation/TaskCreation";
 import { TaskEdit } from "../../components/TaskEdit/TaskEdit";
+import { TableOfTasks } from "./components/TableOfTasks";
 
 export const Tasks = () => {
   // Запрос на получение заявок
@@ -48,6 +48,7 @@ export const Tasks = () => {
 
       {isCreateFormVisible && <TaskCreation />}
       {isEditFormVisible && <TaskEdit />}
+      
     </div>
   );
 };

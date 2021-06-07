@@ -23,9 +23,7 @@ export const TaskEdit = () => {
       </header>
 
       <div className={styles.formCover}>
-        
         <LeftFormSide />
-
         <RightFormSide />
       </div>
     </div>

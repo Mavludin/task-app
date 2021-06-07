@@ -2,14 +2,10 @@ import React, { useState } from "react";
 import styles from "./../TaskCreation.module.css";
 import loader from "./../../../assets/img/oval.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { showEditForm } from "../../../store/slices/editForm";
-import { hideCreateForm } from "../../../store/slices/createForm";
 import {
-  createTask,
-  getTask,
-  selectPostStaus,
+  selectPostStatus,
 } from "../../../store/slices/task";
-import { getTasks } from "../../../store/slices/tasks";
+import { postNewTask } from "../../../shared/main/projectLogic";
 
 export const Form = () => {
   const [taskName, setTaskName] = useState("");
@@ -24,45 +20,11 @@ export const Form = () => {
 
   const dispatch = useDispatch();
 
-  const postTaskStatus = useSelector(selectPostStaus);
+  const postTaskStatus = useSelector(selectPostStatus);
   const loading = postTaskStatus === "loading";
   const failed = postTaskStatus === "failed";
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Задаем какие-то значения статуса b приоритета
-    const priorityId = JSON.parse(localStorage.getItem("priorities")).find(
-      (item) => item.name === "Средний"
-    ).id;
-    const statusId = JSON.parse(localStorage.getItem("statuses")).find(
-      (item) => item.name === "Открыта"
-    ).id;
-
-    const taskObj = {
-      name: taskName,
-      description: taskDesc,
-      comment: "",
-      price: 100.0,
-      taskTypeId: 43805,
-      statusId,
-      priorityId,
-      serviceId: 43804,
-      resolutionDatePlan: new Date(Date.now() + 7200 * 1000 * 24),
-      tags: [],
-      initiatorId: 43806,
-      executorId: 43806,
-      executorGroupId: 43804,
-    };
-
-    dispatch(createTask(taskObj))
-      .then(({ payload }) => {
-        dispatch(getTasks());
-        dispatch(getTask(payload)).then(() => {
-          dispatch(showEditForm());
-          dispatch(hideCreateForm());
-        });
-      })
-      .catch((err) => console.log(err));
+    postNewTask(e, taskName, taskDesc, dispatch)
   };
 
   return (

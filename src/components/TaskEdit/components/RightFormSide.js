@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styles from "./../TaskEdit.module.css";
 import calendar from "./../../../assets/img/calendar.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getTasks } from "../../../store/slices/tasks";
-import { editTask, getTask, taskSelection } from "../../../store/slices/task";
+import { taskSelection } from "../../../store/slices/task";
 import closeIcon from './../../../assets/img/close.svg'
+import { editExecutor, editStatus } from "../../../shared/main/projectLogic";
 
 export const RightFormSide = () => {
 
@@ -27,57 +27,13 @@ export const RightFormSide = () => {
   const dispatch = useDispatch()
 
   const handleStatusChange = (e) => {
-    e.preventDefault()
-    
     setStatus(statuses[e.target.selectedIndex]);
-
-    const taskObj = {
-      id: selectedTask.id,
-      name: selectedTask.name,
-      description: selectedTask.description,
-      comment: selectedTask.comment,
-      price: selectedTask.price,
-      taskTypeId: selectedTask.taskTypeId,
-      statusId: statuses[e.target.selectedIndex].id,
-      priorityId: selectedTask.priorityId,
-      serviceId: selectedTask.serviceId,
-      resolutionDatePlan: selectedTask.resolutionDatePlan,
-      tags: [],
-      initiatorId: selectedTask.initiatorId,
-      executorId: selectedTask.executorId,
-      executorGroupId: selectedTask.executorGroupId,
-    };
-
-    dispatch(editTask(taskObj)).then(() => {
-      dispatch(getTask(selectedTask.id))
-      dispatch(getTasks())
-    })
+    editStatus(e, dispatch, statuses, selectedTask)
   };
 
   const handleUserChange = (e) => {
     setUser(users[e.target.selectedIndex]);
-
-    const taskObj = {
-      id: selectedTask.id,
-      name: selectedTask.name,
-      description: selectedTask.description,
-      comment: selectedTask.comment,
-      price: selectedTask.price,
-      taskTypeId: selectedTask.taskTypeId,
-      statusId: selectedTask.statusId,
-      priorityId: selectedTask.priorityId,
-      serviceId: selectedTask.serviceId,
-      resolutionDatePlan: selectedTask.resolutionDatePlan,
-      tags: [],
-      initiatorId: selectedTask.initiatorId,
-      executorId: users[e.target.selectedIndex].id,
-      executorGroupId: selectedTask.executorGroupId,
-    };
-
-    dispatch(editTask(taskObj)).then(() => {
-      dispatch(getTask(selectedTask.id))
-      dispatch(getTasks())
-    })
+    editExecutor(e, dispatch, users, selectedTask)
   };
 
   return (

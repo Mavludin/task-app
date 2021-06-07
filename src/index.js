@@ -7,11 +7,9 @@ import { Provider } from 'react-redux';
 import { globalStore } from './store';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={globalStore}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={globalStore}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 

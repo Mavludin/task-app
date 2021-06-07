@@ -3,7 +3,8 @@ import styles from "./../TaskEdit.module.css";
 import loader from "./../../../assets/img/oval.svg";
 import circle from "./../../../assets/img/circle.png";
 import { useDispatch, useSelector } from "react-redux";
-import { editTask, getTask, selectPutStatus, taskSelection } from "../../../store/slices/task";
+import { selectPutStatus, taskSelection } from "../../../store/slices/task";
+import { addComment } from "../../../shared/main/projectLogic";
 
 export const LeftFormSide = () => {
 
@@ -16,28 +17,8 @@ export const LeftFormSide = () => {
   const selectedTask = useSelector(taskSelection)
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const taskObj = { 
-      id: selectedTask.id,
-      name: selectedTask.name,
-      description: selectedTask.description,
-      comment: taskComment,
-      price: selectedTask.price,
-      taskTypeId: selectedTask.taskTypeId,
-      statusId: selectedTask.statusId,
-      priorityId: selectedTask.priorityId,
-      serviceId: selectedTask.serviceId,
-      resolutionDatePlan: selectedTask.resolutionDatePlan,
-      tags: [],
-      initiatorId: selectedTask.initiatorId,
-      executorId: selectedTask.executorId,
-      executorGroupId: selectedTask.executorGroupId,
-    };
-
-    dispatch(editTask(taskObj)).then(() => {
-      dispatch(getTask(selectedTask.id))
-    })
+    addComment(e, dispatch, taskComment, selectedTask);
+    setTaskComment("")
   };
 
   return (

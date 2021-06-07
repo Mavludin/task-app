@@ -5,7 +5,7 @@ import { Form } from "./components/Form";
 import { useDispatch } from "react-redux";
 import { hideCreateForm } from "../../store/slices/createForm";
 
-export const TaskCreation = ({ setSelectedTask }) => {
+export const TaskCreation = () => {
 
   const dispatch = useDispatch()
   
@@ -18,7 +18,7 @@ export const TaskCreation = ({ setSelectedTask }) => {
         </button>
       </header>
 
-      <Form setSelectedTask={setSelectedTask} />
+      <Form />
     </div>
   );
 };

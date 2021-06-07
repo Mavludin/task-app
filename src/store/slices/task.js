@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { singleTaskUrl } from "../../shared/endpoints";
+import { singleTaskUrl } from "../../shared/main/endpoints";
 
 export const initialState = {
   task: {},
@@ -87,4 +87,4 @@ export const taskReducer = taskSlice.reducer;
 export const taskSelection = state => state.taskReducer.task
 export const singleTaskStatus = state => state.taskReducer.getStatus
 export const selectPutStatus = state => state.taskReducer.putStatus
-export const selectPostStaus = state => state.taskReducer.postStatus
+export const selectPostStatus = state => state.taskReducer.postStatus
