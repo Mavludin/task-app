@@ -32,6 +32,8 @@ export const Tasks = () => {
     if (!isCreateFormVisible) dispatch(showCreateForm());
   };
 
+  console.log('Tasks')
+
   return (
     <div className={styles.tasks}>
       <div style={{ width: "50%" }}>
